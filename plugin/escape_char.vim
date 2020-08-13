@@ -16,7 +16,12 @@ function! EscapeText(text)
     \   "\x07"  : '\\a',
     \   "\x0B"  : '\\v',
     \   "\f"    : '\\f',
-    \   '\.'    : '\\.',
+    \   '.'    : '\\.',
+    \   '\~'    : '\\~',
+    \   '\/'    : '\\/',
+    \   '('    : '\\(',
+    \   ')'    : '\\)',
+    \   '*'    : '\\*',
     \   }
 
     " Escape any existing backslashes in the text first, before

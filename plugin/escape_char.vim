@@ -6,22 +6,41 @@ function! EscapeText(text)
     " strings don't require double-backslashing, but these are necessary
     " to make the substitute() call below work properly.
     "
+    " let l:charmap = {
+    " \   '"'     : '\\"',
+    " \   "'"     : '\\''',
+    " \   "\n"    : '\\n',
+    " \   "\r"    : '\\r',
+    " \   "\b"    : '\\b',
+    " \   "\t"    : '\\t',
+    " \   "\x07"  : '\\a',
+    " \   "\x0B"  : '\\v',
+    " \   "\f"    : '\\f',
+    " \   '.'    : '\\.',
+    " \   '\~'    : '\\~',
+    " \   '\/'    : '\\/',
+    " \   '('    : '\\(',
+    " \   ')'    : '\\)',
+    " \   '*'    : '\\*',
+    " \   }
+
+    " For Rg
     let l:charmap = {
-    \   '"'     : '\\"',
     \   "'"     : '\\''',
-    \   "\n"    : '\\n',
-    \   "\r"    : '\\r',
-    \   "\b"    : '\\b',
-    \   "\t"    : '\\t',
-    \   "\x07"  : '\\a',
-    \   "\x0B"  : '\\v',
-    \   "\f"    : '\\f',
-    \   '.'    : '\\.',
-    \   '\~'    : '\\~',
-    \   '\/'    : '\\/',
+    \   '\.'    : '\\.',
     \   '('    : '\\(',
     \   ')'    : '\\)',
+    \   '{'    : '\\{',
+    \   '}'    : '\\}',
+    \   '['    : '\\[',
+    \   ']'    : '\\]',
     \   '*'    : '\\*',
+    \   '+'    : '\\+',
+    \   '-'    : '\\-',
+    \   '|'    : '\\\\|',
+    \   '#'    : '\\\\#',
+    \   '%'    : '\\\\%',
+    \   '\^'    : '\\^',
     \   }
 
     " Escape any existing backslashes in the text first, before
@@ -50,7 +69,6 @@ function! EscapeText(text)
     \   'g')
 
     return l:escaped_text
-
 endfunction
 
 
@@ -85,12 +103,14 @@ function! PasteEscapedRegister(where)
 
 endfunction
 
-
 " Store escaped str to system clipboard
 function! EscapeStr(...)
     let l:reg = (a:0 >= 1) ? a:1 : "*"
     call setreg(l:reg, EscapeText(getreg(l:reg)), "c")
+    echom 'Escaped text saved to register ' . l:reg
 endfunction
+
 command! -nargs=* EscapeStr call EscapeStr(<f-args>)
+vnoremap <Leader>es "*y:EscapeStr<CR>
 
 

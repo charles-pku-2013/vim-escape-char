@@ -1,3 +1,4 @@
+" TODO 不支持中文字符
 function! EscapeText(text)
 
     let l:escaped_text = a:text
@@ -26,7 +27,7 @@ function! EscapeText(text)
 
     " For Rg
     let l:charmap = {
-    \   "'"     : '\\''',
+    \   "'"     : "''",
     \   '\.'    : '\\.',
     \   '('    : '\\(',
     \   ')'    : '\\)',

@@ -104,14 +104,21 @@ function! PasteEscapedRegister(where)
 
 endfunction
 
+let s:do_escape = 1
+
 " Store escaped str to system clipboard
 function! EscapeStr(...)
+    if !s:do_escape
+        return
+    endif
     let l:reg = (a:0 >= 1) ? a:1 : "*"
     call setreg(l:reg, EscapeText(getreg(l:reg)), "c")
-    echom 'Escaped text saved to register ' . l:reg
+    " echom 'Escaped text saved to register ' . l:reg
 endfunction
 
 command! -nargs=* EscapeStr call EscapeStr(<f-args>)
+command! EscapeStrOn let s:do_escape = 1
+command! EscapeStrOff let s:do_escape = 0
 vnoremap <Leader>es "*y:EscapeStr<CR>
 
 

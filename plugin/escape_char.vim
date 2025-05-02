@@ -42,6 +42,7 @@ function! EscapeText(text)
     \   '|'    : '\\\\|',
     \   '#'    : '\\\\#',
     \   '%'    : '\\\\%',
+    \   '\$'    : '\\$',
     \   '\^'    : '\\^',
     \   }
 
@@ -105,21 +106,23 @@ function! PasteEscapedRegister(where)
 
 endfunction
 
-let s:do_escape = 1
+" let s:do_escape = 1
 
 " Store escaped str to system clipboard
 function! EscapeStr(...)
-    if !s:do_escape
-        return
-    endif
+    " if !s:do_escape
+        " return
+    " endif
     let l:reg = (a:0 >= 1) ? a:1 : "*"
     call setreg(l:reg, EscapeText(getreg(l:reg)), "c")
-    " echom 'Escaped text saved to register ' . l:reg
+    execute "echom @" . l:reg
 endfunction
 
-command! -nargs=* EscapeStr call EscapeStr(<f-args>)
-command! EscapeStrOn let s:do_escape = 1
-command! EscapeStrOff let s:do_escape = 0
-vnoremap <Leader>es "*y:EscapeStr<CR>
-
+" Usage: first copy original text to register
+" Then, run :Escape <reg> (default reg is system clipboard)
+" The result is kept in the same register
+command! -nargs=* Escape call EscapeStr(<f-args>)
+" command! EscapeStrOn let s:do_escape = 1
+" command! EscapeStrOff let s:do_escape = 0
+vnoremap <silent> <Leader>es "*y:Escape<CR>
 
